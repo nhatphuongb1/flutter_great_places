@@ -1,10 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 
 import '../models/place.dart';
 
 class GreatPlaces with ChangeNotifier {
   List<Place> _items = [];
+
   List<Place> get items {
     return [..._items];
+  }
+
+  addPlace(String pickedTitle, File pickedImage) {
+    final newPlace = Place(
+        id: DateTime.now().toString(),
+        title: pickedTitle,
+        image: pickedImage,
+        location: null);
+
+    _items.add(newPlace);
+    notifyListeners();
   }
 }

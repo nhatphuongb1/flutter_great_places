@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_great_places/models/place.dart';
+import 'package:flutter_great_places/providers/great_places.dart';
 import 'package:flutter_great_places/widgets/image_input.dart';
+import 'package:provider/provider.dart';
 
 class AddPlacePage extends StatefulWidget {
   AddPlacePage({Key key}) : super(key: key);
@@ -12,6 +17,23 @@ class AddPlacePage extends StatefulWidget {
 
 class _AddPlacePageState extends State<AddPlacePage> {
   final _titleController = TextEditingController();
+  File _pickedImage;
+
+  void _selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
+  }
+
+  void _savePlace() {
+    if (_titleController.text.isEmpty || _pickedImage == null) {
+      return;
+    }
+
+    Provider.of<GreatPlaces>(context, listen: false)
+        .addPlace(_titleController.text, _pickedImage);
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,14 +56,17 @@ class _AddPlacePageState extends State<AddPlacePage> {
                 SizedBox(
                   height: 10,
                 ),
-                ImageInput()
+                ImageInput(
+                  onSelectImage: _selectImage,
+                )
               ],
             ),
           )),
           RaisedButton.icon(
             icon: Icon(Icons.add),
             label: Text("Add Place"),
-            onPressed: () {},
+            onPressed: _savePlace,
+            elevation: 0,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             color: Theme.of(context).accentColor,
           )

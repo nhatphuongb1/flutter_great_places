@@ -17,5 +17,5 @@ class Place {
   final PlaceLocation location;
   final File image;
 
-  Place(this.id, this.title, this.location, this.image);
+  Place({this.id, this.title, this.location, this.image});
 }
