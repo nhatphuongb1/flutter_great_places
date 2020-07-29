@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_great_places/constants/message_constants.dart';
+import 'package:flutter_great_places/constants/title_constants.dart';
 import 'add_place_page.dart';
 
 import 'package:provider/provider.dart';
@@ -11,7 +13,7 @@ class PlacesListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Your Places"),
+          title: Text(TitleConstants.PLACES_LIST_PAGE),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
@@ -21,22 +23,31 @@ class PlacesListPage extends StatelessWidget {
             )
           ],
         ),
-        body: Consumer<GreatPlaces>(
-            child: Center(
-              child: Text("Place"),
-            ),
-            builder: (context, greatPlaces, child) =>
-                greatPlaces.items.length <= 0
-                    ? child
-                    : ListView.builder(
-                        itemCount: greatPlaces.items.length,
-                        itemBuilder: (ctx, i) => ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                FileImage(greatPlaces.items[i].image),
-                          ),
-                          title: Text(greatPlaces.items[i].title),
-                        ),
-                      )));
+        body: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false)
+              .fetchAndSetPlaces(),
+          builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Consumer<GreatPlaces>(
+                      child: Center(
+                        child: Text(MessageConstants.PLACES_DATA_IS_EMPTY),
+                      ),
+                      builder: (context, greatPlaces, child) =>
+                          greatPlaces.items.length <= 0
+                              ? child
+                              : ListView.builder(
+                                  itemCount: greatPlaces.items.length,
+                                  itemBuilder: (ctx, i) => ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage:
+                                          FileImage(greatPlaces.items[i].image),
+                                    ),
+                                    title: Text(greatPlaces.items[i].title),
+                                  ),
+                                )),
+        ));
   }
 }

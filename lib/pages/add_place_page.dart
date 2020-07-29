@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_great_places/constants/title_constants.dart';
 import 'package:flutter_great_places/models/place.dart';
 import 'package:flutter_great_places/providers/great_places.dart';
 import 'package:flutter_great_places/widgets/image_input.dart';
@@ -24,6 +25,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
   }
 
   void _savePlace() {
+
     if (_titleController.text.isEmpty || _pickedImage == null) {
       return;
     }
@@ -38,7 +40,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add a New Place"),
+        title: Text(TitleConstants.ADD_PLACE_PAGE),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
